@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UEAKNESS MODS — Сборки</title>
+<style>
+body{
+  margin:0;
+  background:#121212;
+  color:#eee;
+  font-family:Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:15px;
+}
+h1{ margin-bottom:8px; text-align:center; }
+
+.btn{
+  padding:12px 26px;
+  background:#1e1e1e;
+  color:#f5f5f5;
+  border:none;
+  border-radius:12px;
+  margin:6px;
+  cursor:pointer;
+  transition:0.3s;
+  text-decoration:none;
+}
+.btn:hover{
+  background:#fff;
+  color:#121212;
+  transform:scale(1.05);
+  box-shadow:0 0 12px rgba(255,255,255,0.35);
+}
+
+#builds{ 
+  width:100%; 
+  max-width:720px; 
+  display:flex; 
+  flex-direction:column; 
+  gap:16px; 
+  margin-top:10px; 
+}
+
+.build{ 
+  background:#1a1a1a; 
+  padding:12px; 
+  border-radius:12px; 
+  transition:0.3s; 
+  display:flex; 
+  flex-direction:column; 
+  justify-content:space-between;
+}
+
+.build:hover{ 
+  box-shadow:0 0 12px rgba(255,255,255,0.25); 
+}
+
+.build img{ 
+  width:100%; 
+  aspect-ratio:16/9; 
+  border-radius:8px; 
+}
+
+.build h3{ 
+  margin:10px 0 4px 0; 
+}
+
+.date{ 
+  font-size:0.8rem; 
+  color:#999; 
+  margin-bottom:6px; 
+}
+
+.build p{ 
+  margin:0 0 8px 0; 
+  font-size:0.95rem; 
+  color:#ccc; 
+}
+
+.actions{
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+  margin-top:4px;
+}
+
+.actions a{
+  color:#fff;
+  text-decoration:none;
+}
+
+.actions a:hover{ 
+  text-decoration:underline; 
+}
+
+.actionBtn{
+  background:none; 
+  border:none; 
+  color:#bbb; 
+  font-size:18px; 
+  cursor:pointer; 
+  transition:0.2s; 
+  margin-left:6px; 
+}
+
+.actionBtn:hover{
+  color:#fff; 
+  transform:scale(1.15); 
+}
+
+#form{ 
+  display:none; 
+  flex-direction:column; 
+  width:100%; 
+  max-width:720px; 
+  margin:8px 0; 
+  gap:8px; 
+  padding:12px; 
+  background:#1e1e1e; 
+  border-radius:12px; 
+}
+#form.show{ display:flex; }
+
+input, textarea{ 
+  background:#121212; 
+  color:#eee; 
+  border:none; 
+  border-radius:8px; 
+  padding:10px; 
+  font-size:1rem; 
+}
+
+textarea{ resize:none; }
+</style>
+</head>
+<body>
+
+<h1>UEAKNESS MODS</h1>
+
+<a class="btn" href="index.html">На главную</a>
+<button class="btn" id="addBtn" style="display:none">Добавить сборку</button>
+
+<div id="form">
+  <input id="title" placeholder="Название сборки">
+  <input id="image" placeholder="Ссылка на превью (1280×720)">
+  <textarea id="desc" placeholder="Описание"></textarea>
+  <input id="link" placeholder="Ссылка на скачивание">
+  <button class="btn" id="saveBtn">Сохранить</button>
+  <button class="btn" id="cancelBtn">Отмена</button>
+</div>
+
+<div id="builds"></div>
+
+<script>
+// проверка админа
+const isAdmin = localStorage.getItem("isAdmin") === "1";
+const addBtn = document.getElementById("addBtn");
+if(isAdmin){ addBtn.style.display = "inline-block"; }
+
+// данные сборок
+let builds = JSON.parse(localStorage.getItem("builds") || "[]");
+let editIndex = null;
+
+// элементы формы
+const form = document.getElementById("form");
+const title = document.getElementById("title");
+const image = document.getElementById("image");
+const desc = document.getElementById("desc");
+const link = document.getElementById("link");
+
+function formatDate(ts){
+  if(!ts || isNaN(ts)) return "без даты";
+  const d = new Date(Number(ts));
+  return d.toLocaleDateString("ru-RU",{day:"2-digit", month:"2-digit", year:"numeric"});
+}
+
+function renderBuilds(){
+  const container = document.getElementById("builds");
+  container.innerHTML = "";
+
+  builds.forEach((b,i)=>{
+    const div = document.createElement("div");
+    div.className = "build";
+
+    div.innerHTML = `
+      <img src="${b.image}">
+      <h3>${b.title}</h3>
+      <div class="date">Опубликовано: ${formatDate(b.date)}</div>
+      <p>${b.desc}</p>
+      <div class="actions">
+        <a href="${b.link}" target="_blank">Скачать</a>
+        <span class="adminActions"></span>
+      </div>
+    `;
+
+    if(isAdmin){
+      const actions = div.querySelector(".adminActions");
+
+      const edit = document.createElement("button");
+      edit.className = "actionBtn";
+      edit.innerHTML = "✎";
+      edit.onclick = ()=>editBuild(i);
+
+      const del = document.createElement("button");
+      del.className = "actionBtn";
+      del.innerHTML = "🗑";
+      del.onclick = ()=>deleteBuild(i);
+
+      actions.appendChild(edit);
+      actions.appendChild(del);
+    }
+
+    container.appendChild(div);
+  });
+}
+
+// открытие формы добавления
+addBtn.onclick = ()=>{
+  if(!isAdmin) return;
+  editIndex = null;
+  title.value = image.value = desc.value = link.value = "";
+  form.classList.add("show");
+};
+
+// отмена
+document.getElementById("cancelBtn").onclick = ()=>{
+  form.classList.remove("show");
+  editIndex = null;
+};
+
+// сохранение новой сборки
+document.getElementById("saveBtn").onclick = ()=>{
+  if(!isAdmin) return alert("Нет доступа");
+
+  const data = {
+    title: title.value.trim(),
+    image: image.value.trim(),
+    desc: desc.value.trim(),
+    link: link.value.trim(),
+    date: editIndex !== null && builds[editIndex].date ? builds[editIndex].date : Date.now()
+  };
+
+  if(!data.title || !data.image) return alert("Заполни минимум название и превью");
+
+  if(editIndex !== null){
+    builds[editIndex] = data;
+  } else {
+    builds.unshift(data); 
+  }
+
+  localStorage.setItem("builds", JSON.stringify(builds));
+  form.classList.remove("show");
+  editIndex = null;
+  renderBuilds();
+};
+
+// редактирование
+function editBuild(i){
+  if(!isAdmin) return;
+  editIndex = i;
+  const b = builds[i];
+  title.value = b.title;
+  image.value = b.image;
+  desc.value = b.desc;
+  link.value = b.link;
+  form.classList.add("show");
+}
+
+// удаление
+function deleteBuild(i){
+  if(!isAdmin) return;
+  if(!confirm("Удалить эту сборку?")) return;
+  builds.splice(i,1);
+  localStorage.setItem("builds", JSON.stringify(builds));
+  renderBuilds();
+}
+
+// запуск
+renderBuilds();
+</script>
+
+</body>
+</html>
