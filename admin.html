@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка UEAKNESS MODS</title>
+<style>
+body {
+  margin: 0;
+  background: #1c1c1c;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+h2 { margin-bottom: 20px; }
+.btn {
+  padding: 14px 28px;
+  background: #2a2a2a;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn:hover {
+  background: #fff;
+  color: #121212;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+.notice {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+</style>
+</head>
+<body>
+
+<h2>Вход администратора</h2>
+
+<!-- Контейнер для Telegram Login Widget -->
+<div id="telegram-login-container"></div>
+
+<!-- Кнопка на случай мобильных устройств -->
+<a id="mobile-telegram-btn" class="btn" href="https://t.me/AuthorizationUeaknessBot?start=admin">
+  Войти через Telegram
+</a>
+
+<a href="index.html" class="btn">На главную</a>
+
+<div class="notice">
+Если авторизация не срабатывает, убедитесь, что Telegram установлен.
+</div>
+
+<script>
+// Твой Telegram ID
+const ADMIN_ID = 761769081;
+
+// Функция для Telegram Login Widget (ПК)
+function onTelegramAuth(user) {
+    console.log("Telegram user:", user);
+    if(user && user.id === ADMIN_ID){
+        localStorage.setItem("isAdmin","1");
+        alert("Вы вошли как администратор!");
+        window.location.href = "builds.html";
+    } else {
+        alert("Доступ запрещён!");
+    }
+}
+
+// Определяем мобильное устройство
+function isMobile() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+// Если мобильное устройство, скрываем виджет и показываем кнопку
+if(isMobile()){
+    document.getElementById("telegram-login-container").style.display = "none";
+    document.getElementById("mobile-telegram-btn").style.display = "inline-block";
+} else {
+    // Для ПК динамически создаём Telegram Login Widget
+    const container = document.getElementById('telegram-login-container');
+    const script = document.createElement('script');
+    script.src = "https://telegram.org/js/telegram-widget.js?22";
+    script.async = true;
+    script.setAttribute("data-telegram-login","AuthorizationUeaknessBot");
+    script.setAttribute("data-size","large");
+    script.setAttribute("data-userpic","false");
+    script.setAttribute("data-request-access","write");
+    script.setAttribute("data-onauth","onTelegramAuth");
+    container.appendChild(script);
+
+    // Скрываем мобильную кнопку
+    document.getElementById("mobile-telegram-btn").style.display = "none";
+}
+</script>
+
+</body>
+</html>
