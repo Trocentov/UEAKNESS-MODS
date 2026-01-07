@@ -1,7 +1,6 @@
-/* Общие стили */
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e1e2f; /* Приятный тёмный оттенок */
+    background-color: #1e1e2f;
     color: #fff;
     margin: 0;
     padding: 0;
@@ -15,12 +14,11 @@ h1, h2 {
     margin: 10px 0;
 }
 
-/* Кнопки */
 button, .btn {
-    background-color: #ffffff; /* Приятный белый тон */
+    background-color: #ffffff;
     color: #1e1e2f;
     border: none;
-    border-radius: 8px; /* Закругленные края */
+    border-radius: 8px;
     padding: 10px 20px;
     margin: 5px;
     cursor: pointer;
@@ -32,43 +30,44 @@ button:hover, .btn:hover {
     transform: scale(1.05);
 }
 
-/* Контейнеры */
 .container {
     max-width: 900px;
     width: 95%;
     margin: 20px auto;
 }
 
-/* Блок сборки */
 .build {
     background-color: #2a2a3f;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 15px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
 }
 
 .build img {
-    width: 200px;
-    height: 112px; /* Пропорции 1280x720 */
+    width: 100%;
+    max-width: 720px;
+    height: 405px;
     object-fit: cover;
     border-radius: 6px;
 }
 
 .build-info {
-    flex: 1;
-    margin-left: 15px;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
 }
 
-/* Кнопки админа справа */
-.admin-buttons {
+.build-buttons {
     display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 10px;
     gap: 5px;
 }
 
-/* Скрытые элементы для обычного пользователя */
 .admin-only {
     display: none;
 }

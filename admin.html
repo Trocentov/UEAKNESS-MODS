@@ -7,20 +7,23 @@
 <link rel="stylesheet" href="style.css">
 <script src="script.js"></script>
 </head>
-<body onload="renderBuilds('buildsContainer');">
+<body onload="renderBuilds('buildsContainer')">
 <h1>Ueakness Mods</h1>
 <h2>Администрация</h2>
 <div class="container">
-    <button onclick="showAddBuildForm()">Добавить сборку</button>
-    <form id="addBuildForm" style="display:none;" onsubmit="submitAddBuildForm(); return false;">
+    <button id="addBuildBtn" onclick="showAddBuildForm()">Добавить сборку</button>
+    <button onclick="window.location.href='builds.html'">Перейти в сборки</button>
+    <button onclick="logoutAdmin()">Выйти из админа</button>
+
+    <form id="addBuildForm" style="display:none;" onsubmit="submitAddBuildForm(event)">
         <input id="newTitle" placeholder="Название сборки" required>
         <input id="newPreview" placeholder="Ссылка на превью 1280x720" required>
         <input id="newDescription" placeholder="Описание сборки" required>
         <input id="newDownload" placeholder="Ссылка на скачивание" required>
         <button type="submit">Создать сборку</button>
     </form>
+
     <div id="buildsContainer"></div>
-    <button onclick="logoutAdmin()">Выйти на главную</button>
 </div>
 </body>
 </html>

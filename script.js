@@ -1,4 +1,4 @@
-// Проверка администратора
+// === Админ проверка ===
 const ADMIN_USERNAME = "winged";
 const ADMIN_PASSWORD = "142531";
 
@@ -19,42 +19,43 @@ function logoutAdmin() {
     window.location.href = "index.html";
 }
 
-// Сборки
+// === Сборки ===
 function getBuilds() {
     let builds = localStorage.getItem("builds");
-    if(builds) return JSON.parse(builds);
-    return [];
+    return builds ? JSON.parse(builds) : [];
 }
 
 function saveBuilds(builds) {
     localStorage.setItem("builds", JSON.stringify(builds));
 }
 
-// Добавление сборки
 function addBuild(title, preview, description, download) {
-    let builds = getBuilds();
+    const builds = getBuilds();
     builds.push({
-        title, preview, description, download,
+        title,
+        preview,
+        description,
+        download,
         date: new Date().toLocaleString()
     });
     saveBuilds(builds);
 }
 
-// Редактирование сборки
 function editBuild(index, title, preview, description, download) {
-    let builds = getBuilds();
-    builds[index] = {title, preview, description, download, date: builds[index].date};
+    const builds = getBuilds();
+    builds[index] = {
+        title, preview, description, download, date: builds[index].date
+    };
     saveBuilds(builds);
 }
 
-// Удаление
 function deleteBuild(index) {
-    let builds = getBuilds();
-    builds.splice(index, 1);
+    const builds = getBuilds();
+    builds.splice(index,1);
     saveBuilds(builds);
 }
 
-// Отображение сборок
+// === Рендер сборок ===
 function renderBuilds(containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -62,25 +63,28 @@ function renderBuilds(containerId) {
     builds.forEach((b, idx) => {
         const buildDiv = document.createElement("div");
         buildDiv.className = "build";
-
         buildDiv.innerHTML = `
             <img src="${b.preview}" alt="${b.title}">
             <div class="build-info">
                 <h2>${b.title}</h2>
                 <p>${b.description}</p>
                 <p><small>Опубликовано: ${b.date}</small></p>
-            </div>
-            <div class="admin-buttons">
                 <a class="btn" href="${b.download}" target="_blank">Скачать</a>
-                ${isAdmin() ? `<button onclick="editBuildPrompt(${idx})" class="btn admin-only">Редактировать</button>` : ''}
-                ${isAdmin() ? `<button onclick="deleteBuild(${idx}); renderBuilds('${containerId}');" class="btn admin-only">Удалить</button>` : ''}
+            </div>
+            <div class="build-buttons">
+                ${isAdmin() ? `<button class="btn admin-only" onclick="editBuildPrompt(${idx})">Редактировать</button>` : ''}
+                ${isAdmin() ? `<button class="btn admin-only" onclick="deleteBuild(${idx}); renderBuilds('${containerId}');">Удалить</button>` : ''}
             </div>
         `;
         container.appendChild(buildDiv);
     });
+
+    // Показ кнопки "Добавить сборку" только для админа
+    const addBtn = document.getElementById("addBuildBtn");
+    if(addBtn) addBtn.style.display = isAdmin() ? "inline-block" : "none";
 }
 
-// Подсказка редактирования
+// === Редактирование через prompt ===
 function editBuildPrompt(idx) {
     const builds = getBuilds();
     const b = builds[idx];
@@ -94,13 +98,15 @@ function editBuildPrompt(idx) {
     }
 }
 
-// Добавление через форму админа
+// === Показ формы добавления сборки ===
 function showAddBuildForm() {
     const form = document.getElementById("addBuildForm");
     form.style.display = form.style.display === "block" ? "none" : "block";
 }
 
-function submitAddBuildForm() {
+// === Отправка формы добавления сборки ===
+function submitAddBuildForm(e) {
+    e.preventDefault();
     const title = document.getElementById("newTitle").value;
     const preview = document.getElementById("newPreview").value;
     const description = document.getElementById("newDescription").value;
@@ -109,5 +115,6 @@ function submitAddBuildForm() {
         addBuild(title, preview, description, download);
         renderBuilds("buildsContainer");
         document.getElementById("addBuildForm").reset();
+        document.getElementById("addBuildForm").style.display = "none";
     }
 }
