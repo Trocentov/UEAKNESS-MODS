@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Админка</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Ueakness Mods</h1>
+  <h2>Администрация</h2>
+</header>
+
+<div class="container" style="text-align:center">
+  <input id="login" placeholder="Логин"><br><br>
+  <input id="pass" type="password" placeholder="Пароль"><br><br>
+  <button class="btn" onclick="login()">Войти</button>
+  <br><br>
+  <a class="btn" href="index.html">⬅ Назад</a>
+</div>
+
+<script>
+function login() {
+  if (
+    document.getElementById('login').value === 'admin' &&
+    document.getElementById('pass').value === 'admin123'
+  ) {
+    localStorage.setItem('admin','1');
+    location.href='builds.html';
+  } else {
+    alert('Неверно');
+  }
+}
+</script>
+
+</body>
+</html>
