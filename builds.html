@@ -3,74 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Сборки - UEAKNESS MODS</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-body { font-family:'Inter',sans-serif; background-color:#2a2a2a; color:#fff; padding:20px; text-align:center;}
-h1 { font-size:2rem; margin-bottom:20px;}
-.btn { padding:10px 24px; margin:10px; font-size:1rem; color:#fff; background-color:#3a3a3a; border:none; border-radius:8px; text-decoration:none; transition:0.3s;}
-.btn:hover { box-shadow:0 0 10px #ffffff44; transform:scale(1.05);}
-.build { background-color:#3a3a3a; border-radius:12px; padding:15px; margin-bottom:20px; text-align:left; max-width:500px; margin:auto;}
-.build img { width:100%; border-radius:8px; object-fit:cover; margin-bottom:10px;}
-.build h2 { font-size:1.3rem; color:#fff; margin-bottom:5px;}
-.build p { font-size:0.9rem; color:#ccc; margin-bottom:10px;}
-.build .download { float:left; background-color:#3a3a3a; color:#fff; padding:8px 16px; border-radius:6px; text-decoration:none;}
-.build .edit, .build .delete { float:right; background-color:transparent; border:none; color:#fff; font-size:1.1rem; cursor:pointer; margin-left:5px; display:none;}
-.clearfix { clear:both; margin-bottom:10px;}
-.addBuildBtn { margin-bottom:20px; display:none;}
-</style>
+<title>Сборки</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
 </head>
-<body>
-
+<body onload="loadUserBuilds()">
 <h1>Сборки UEAKNESS MODS</h1>
-<a class="btn" href="index.html">Вернуться на главную</a>
-
-<!-- Кнопка добавить сборку для админа -->
-<button class="btn addBuildBtn" onclick="addNewBuild()">Добавить сборку</button>
-
-<div id="buildContainer">
-  <div class="build">
-    <img src="https://postimg.cc/TKjxnf25" alt="Preview">
-    <h2>Black—White</h2>
-    <p>Описание сборки: текст</p>
-    <small style="color:#7a7a7a;">Опубликовано: 07.01.2026</small><br>
-    <a class="download" href="https://t.me/UeaknessMods/4" target="_blank">Скачать</a>
-    <button class="edit">✏️</button>
-    <button class="delete">🗑️</button>
-    <div class="clearfix"></div>
-  </div>
-</div>
-
-<script>
-// Админский режим по GET параметру ?admin=1
-const isAdmin = window.location.search.includes("admin=1");
-if(isAdmin){
-  document.querySelector(".addBuildBtn").style.display="inline-block";
-  document.querySelectorAll(".edit").forEach(b=>b.style.display="inline-block");
-  document.querySelectorAll(".delete").forEach(b=>b.style.display="inline-block");
-}
-
-function addNewBuild(){
-  const container = document.getElementById("buildContainer");
-  const div = document.createElement("div");
-  div.className = "build";
-  div.innerHTML = `
-    <img src="https://postimg.cc/TKjxnf25" alt="Preview">
-    <h2>Новая сборка</h2>
-    <p>Описание...</p>
-    <small style="color:#7a7a7a;">Опубликовано: ${new Date().toLocaleDateString()}</small><br>
-    <a class="download" href="#">Скачать</a>
-    <button class="edit">✏️</button>
-    <button class="delete">🗑️</button>
-    <div class="clearfix"></div>
-  `;
-  container.appendChild(div);
-  if(!isAdmin){
-    div.querySelector(".edit").style.display="none";
-    div.querySelector(".delete").style.display="none";
-  }
-}
-</script>
-
+<div class="container" id="buildsContainer"></div>
+<a href="index.html" class="button">Вернуться на главную</a>
 </body>
 </html>
