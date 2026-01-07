@@ -3,30 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Admin</title>
+<title>Ueakness Mods - Админ</title>
 <link rel="stylesheet" href="style.css">
-<script>
-function login() {
-    const user = prompt("Введите ник администратора:");
-    const pass = prompt("Введите пароль:");
-
-    const obfUser = "winged".split('').map(c => c.charCodeAt(0)).join(',');
-    const obfPass = "142531".split('').map(c => c.charCodeAt(0)).join(',');
-
-    if(user.split('').map(c=>c.charCodeAt(0)).join(',') === obfUser &&
-       pass.split('').map(c=>c.charCodeAt(0)).join(',') === obfPass) {
-        window.location.href = "admin.html";
-    } else {
-        alert("Неверные данные!");
-    }
-}
-</script>
+<script src="script.js"></script>
 </head>
 <body>
-<h1>Авторизация администратора</h1>
+<h1>Ueakness Mods</h1>
+<h2>Администрация</h2>
 <div class="container">
-    <button onclick="login()">Войти</button>
-    <a href="index.html" class="button">Вернуться на главную</a>
+    <input id="username" placeholder="Ник администратора">
+    <input id="password" placeholder="Пароль" type="password">
+    <button onclick="if(loginAdmin(username.value, password.value)) window.location.href='admin.html'; else alert('Неверный логин или пароль')">Войти</button>
+    <button onclick="window.location.href='index.html'">Вернуться на главную</button>
 </div>
 </body>
 </html>

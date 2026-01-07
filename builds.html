@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Сборки</title>
+<title>Ueakness Mods - Сборки</title>
 <link rel="stylesheet" href="style.css">
 <script src="script.js"></script>
 </head>
-<body onload="loadUserBuilds()">
-<h1>Сборки UEAKNESS MODS</h1>
-<div class="container" id="buildsContainer"></div>
-<a href="index.html" class="button">Вернуться на главную</a>
+<body onload="renderBuilds('buildsContainer');">
+<h1>Ueakness Mods</h1>
+<h2>Сборки</h2>
+<div class="container">
+    <div id="buildsContainer"></div>
+    <button onclick="window.location.href='index.html'">Вернуться на главную</button>
+</div>
 </body>
 </html>

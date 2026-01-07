@@ -1,6 +1,7 @@
+/* Общие стили */
 body {
     font-family: Arial, sans-serif;
-    background-color: #1f1f1f; /* темно-серый фон */
+    background-color: #1e1e2f; /* Приятный тёмный оттенок */
     color: #fff;
     margin: 0;
     padding: 0;
@@ -10,60 +11,64 @@ body {
 }
 
 h1, h2 {
-    color: #fff;
     text-align: center;
+    margin: 10px 0;
 }
 
-button, a.button {
-    background-color: #fff;
-    color: #1f1f1f;
+/* Кнопки */
+button, .btn {
+    background-color: #ffffff; /* Приятный белый тон */
+    color: #1e1e2f;
     border: none;
+    border-radius: 8px; /* Закругленные края */
     padding: 10px 20px;
     margin: 5px;
     cursor: pointer;
-    border-radius: 6px;
-    text-decoration: none;
+    font-size: 1rem;
+    transition: 0.2s;
 }
 
-button:hover, a.button:hover {
-    background-color: #e0e0e0;
+button:hover, .btn:hover {
+    transform: scale(1.05);
 }
 
+/* Контейнеры */
 .container {
-    max-width: 600px;
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 30px;
+    max-width: 900px;
+    width: 95%;
+    margin: 20px auto;
 }
 
+/* Блок сборки */
 .build {
-    background-color: #2a2a2a;
+    background-color: #2a2a3f;
     border-radius: 10px;
-    padding: 15px;
+    padding: 10px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.build img {
+    width: 200px;
+    height: 112px; /* Пропорции 1280x720 */
+    object-fit: cover;
+    border-radius: 6px;
+}
+
 .build-info {
-    max-width: 60%;
+    flex: 1;
+    margin-left: 15px;
 }
 
-.build-info h2 {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
-}
-
-.build-info p {
-    font-size: 0.9rem;
-    color: #ccc;
-}
-
-.build-buttons {
+/* Кнопки админа справа */
+.admin-buttons {
     display: flex;
-    flex-direction: column;
     gap: 5px;
-    align-items: flex-end;
+}
+
+/* Скрытые элементы для обычного пользователя */
+.admin-only {
+    display: none;
 }
